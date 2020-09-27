@@ -1,0 +1,113 @@
+删除排序数组中的重复项
+class Solution {
+    public int removeDuplicates(int[] nums) {
+        if(nums.length == 0)
+            return 0;
+        int index = 0;
+        for(int i = 0;i < nums.length; i++){
+            if(nums[i] != nums[index]){
+                index ++;
+                nums[index] = nums[i];
+                
+
+            }
+        }
+        return index + 1;
+    }
+}
+
+合并两个有序链表
+class Solution {
+    public ListNode mergeTwoLists(ListNode l1, ListNode l2) {
+         ListNode newNode = new ListNode(0);
+         ListNode cur = newNode;
+         while (l1 != null && l2 != null) {
+             if (l1.val > l2.val) {
+                 cur.next = l2;
+                 l2 = l2.next;
+             } else {
+                 cur.next = l1;
+                 l1 = l1.next;
+             }
+             cur = cur.next;
+         }   
+         cur.next = l1 == null ? l2 : l1;
+         return newNode.next;
+    }
+}
+
+ 合并两个有序数组
+ class Solution {
+    public void merge(int[] nums1, int m, int[] nums2, int n) {
+        int i = m - 1, j = n - 1, k = m + n - 1;
+        while (i >= 0 && j >= 0) {
+            nums1[k--] = nums1[i] > nums2[j] ? nums1[i--] : nums2[j--];
+        } 
+        System.arraycopy(nums2, 0, nums1, 0, j + 1);
+    }
+}
+两数之和
+class Solution {
+    public int[] twoSum(int[] nums, int target) {
+        HashMap<Integer, Integer> cache = new HashMap<Integer, Integer>();
+        for (int i = 0; i < nums.length; ++i) {
+            int cur = target - nums[i];
+            if (cache.containsKey(cur)) {
+                return new int[]{cache.get(cur), i};
+            }
+            cache.put(nums[i], i);
+        }
+        return null;
+    }
+}
+
+移动零
+class Solution {
+    public void moveZeroes(int[] nums) {
+        int j = 0;
+        for (int i = 0; i < nums.length; ++i) {
+            if (nums[i] != 0) {
+                nums[j] = nums[i];
+                if (i != j) {
+                    nums[i] = 0;
+                }
+                j++;
+            }
+        }
+    }
+}
+
+加一
+class Solution {
+    public void moveZeroes(int[] nums) {
+        int j = 0;
+        for (int i = 0; i < nums.length; ++i) {
+            if (nums[i] != 0) {
+                nums[j] = nums[i];
+                if (i != j) {
+                    nums[i] = 0;
+                }
+                j++;
+            }
+        }
+    }
+}
+
+接雨水
+class Solution {
+    public int trap(int[] height) {
+        int ans = 0, current = 0;
+        Deque<Integer> stack = new LinkedList<>();
+        while (current < height.length) {
+            while (!stack.isEmpty() && height[current] > height[stack.peek()]) {
+                int top = stack.pop();
+                if (stack.isEmpty()) break;
+                int length = current - stack.peek() - 1;
+                int h = Math.min(height[current], height[stack.peek()]) - height[top];
+                ans += length * h;
+            }
+            stack.push(current++);
+        }
+        return ans;
+    }
+}
