@@ -1,0 +1,156 @@
+有效的字母异位词
+class Solution {
+    public boolean isAnagram(String s, String t) {
+        if (s.length() != t.length()) return false;
+        char[] cache = new char[26];
+        for (int i = 0; i < s.length(); ++i) {
+            cache[s.charAt(i) - 'a']++;
+            cache[t.charAt(i) - 'a']--;
+        }
+        return String.valueOf(cache).trim().isBlank();
+    }
+}
+两数之和
+class Solution {
+    public int[] twoSum(int[] nums, int target) {
+        Map<Integer, Integer> cache = new HashMap<>();
+        for (int i = 0; i < nums.length; ++i) {
+            int cur = target - nums[i];
+            if (cache.containsKey(cur)) return new int[]{cache.get(cur), i};
+            cache.put(nums[i], i);
+        }
+        return new int[0];
+    }
+}
+N叉树的前序遍历
+class Solution {
+    public List<Integer> preorder(Node root) {
+        List<Integer> ans = new ArrayList<>();
+        Deque<Node> deque = new LinkedList<>();
+        if (root == null)
+            return ans;
+        deque.add(root);
+        while (!deque.isEmpty()) {
+            Node node = deque.pollLast();
+            ans.add(node.val);
+            Collections.reverse(node.children);
+            deque.addAll(node.children);
+        }
+        return ans;
+      }
+}
+字母异位词分组
+class Solution {
+    public List<List<String>> groupAnagrams(String[] strs) {
+        HashMap<String, List<String>> ans = new HashMap<>();
+        char[] cache = new char[26];
+        for (String str : strs) {
+            Arrays.fill(cache, 'a');
+            for (char c : str.toCharArray()) cache[c - 'a']++;
+            String key = String.valueOf(cache);
+            if (!ans.containsKey(key)) ans.put(key, new ArrayList<>());
+            ans.get(key).add(str);
+        }
+        return new ArrayList<>(ans.values());
+    }
+}
+二叉树的中序遍历
+class Solution {
+    public List<Integer> inorderTraversal(TreeNode root) {
+        List<Integer> ans = new ArrayList<>();
+        Deque<TreeNode> deque = new LinkedList<>();
+        while (root != null || !deque.isEmpty()) {
+            while (root != null) {
+                deque.push(root);
+                root = root.left;
+            }
+            root = deque.pop();
+            ans.add(root.val);
+            root = root.right;
+        }
+        return ans;
+    }
+}
+二叉树的前序遍历
+class Solution {
+    public List<Integer> preorderTraversal(TreeNode root) {
+        List<Integer> ans = new ArrayList<>();
+        Deque<TreeNode> deque = new LinkedList<>();
+        while (root != null || !deque.isEmpty()) {
+            while (root != null) {
+                ans.add(root.val);
+                deque.push(root);
+                root = root.left;
+            }
+            root = deque.pop().right;
+        }
+        return ans;
+    }
+}
+N叉树的层序遍历
+class Solution {
+    public List<List<Integer>> levelOrder(Node root) {
+        List<List<Integer>> ans = new ArrayList<>();
+        Deque<Node> deque = new LinkedList<>();
+        if (root == null) return ans;
+        deque.add(root);
+        while (!deque.isEmpty()) {
+            List<Integer> level = new ArrayList<>();
+            int size = deque.size();
+            for (int i = 0; i < size; ++i) {
+                Node node = deque.poll();
+                level.add(node.val);
+                deque.addAll(node.children);
+            }
+            ans.add(level);
+        }
+        return ans;
+    }
+}
+丑数
+class Solution {
+    int[] uglyNumbers = {2,3,5};
+    public int nthUglyNumber(int n) {
+        PriorityQueue<Long> heap = new PriorityQueue<>();
+        heap.offer(1L);
+        int count = 0;
+        while (true) {
+            long num = heap.poll();
+            if (++count == n) return (int) num;
+            for (int uglyNumber : uglyNumbers) {
+                if (!heap.contains(uglyNumber * num)) heap.offer(uglyNumber * num);
+            }
+         }
+    }
+}
+前K个高频元素
+class Solution {
+    public int[] topKFrequent(int[] nums, int k) {
+        HashMap<Integer, Integer> eleTimesMap = new HashMap<>();
+        for(int num : nums){
+            eleTimesMap.put(num, eleTimesMap.getOrDefault(num, 0) + 1);
+        }
+        PriorityQueue<int[]> pq = new PriorityQueue<int[]>(new Comparator<int[]>(){
+            public int compare(int[] a, int[] b){
+                return a[1] - b[1];
+            }
+        });
+        for(Map.Entry<Integer, Integer> eleTimesEntry : eleTimesMap.entrySet()){
+            int ele = eleTimesEntry.getKey(), times = eleTimesEntry.getValue();
+            if(pq.size() == k){
+                if(pq.peek()[1] < times){
+                    pq.poll();
+                    pq.offer(new int[]{ele, times});
+                }
+            }else{
+                pq.offer(new int[]{ele, times});
+            }
+        }
+
+        int[] result = new int[k];
+        for(int i = 0;i < k;i ++){
+            result[i] = pq.poll()[0];
+        }
+        return result;
+    }
+}
